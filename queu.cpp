@@ -3,19 +3,22 @@
 
 using namespace std;
 
-struct queu{
+class queu{
 private:
 	int size;
 	int capasity;
 	int* var;
 public:
-	queu() {
-		size = 0;
-		capasity = 4;
-		var = new int[size];
+	queu(int len = 0, int fill = 0) {
+		size = len;
+		capasity = ceil(size / 4);
+		var = new int[len];
+		for (int i = 0; i < size; ++i)
+			var[i] = fill;
 	}
 	~queu() {
 		delete[] var;
+		cout << "delete";
 	}
 	void add(int x) {
 		++size;
@@ -28,7 +31,9 @@ public:
 		var = new int[size];
 		for (int i = 0; i < size; ++i)
 			var[i] = new_var[i];
-		capasity = ceil(size / 4);
+		if (size < capasity)
+			capasity *= 2;
+		delete[] new_var;
 	}
 	int get() {
 		--size;
@@ -41,18 +46,12 @@ public:
 		var = new int[size];
 		for (int i = 0; i < size; ++i)
 			var[i] = new_var[i];
-		capasity = ceil(size / 4);
+		if (size < capasity)
+			capasity *= 2;
+		delete[] new_var;
 		return first;
 	}
 	int length() {
 		return size;
 	}
 };
-
-int main() {
-	queu a;
-	for (int i = 0; i < 5; ++i)
-		a.add(i * 2);
-	int x = a.get();
-	cout << x;
-}
