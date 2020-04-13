@@ -3,29 +3,56 @@
 
 using namespace std;
 
-struct {
+struct queu{
 private:
-	vector<int> v;
-	bool empty() {
-		if (v.size() > 0)
-			return false;
-		else
-			return true;
-	}
+	int size;
+	int capasity;
+	int* var;
 public:
-	int que_size() {
-		return v.size();
+	queu() {
+		size = 0;
+		capasity = 4;
+		var = new int[size];
 	}
-	void push(int i) {
-		v.push_back(i);
+	~queu() {
+		delete[] var;
 	}
-	int pop() {
-		int x = v[0];
-		for (int i = 0; i < v.size() - 1; ++i)
-			v[i] = v[i + 1];
-		v.pop_back();
-		return x;
+	void add(int x) {
+		++size;
+		int* new_var = new int[size];
+		for (int i = 0; i < size-1; ++i) {
+			new_var[i] = var[i];
+		}
+		new_var[size-1] = x;
+		delete[] var;
+		var = new int[size];
+		for (int i = 0; i < size; ++i)
+			var[i] = new_var[i];
+		capasity = ceil(size / 4);
+	}
+	int get() {
+		--size;
+		int first = var[0];
+		int* new_var = new int[size];
+		for (int i = 0; i < size; ++i) {
+			new_var[i] = var[i + 1];
+		}
+		delete[] var;
+		var = new int[size];
+		for (int i = 0; i < size; ++i)
+			var[i] = new_var[i];
+		capasity = ceil(size / 4);
+		return first;
+	}
+	int length() {
+		return size;
 	}
 };
 
-int main() {}
+int main() {
+	queu a;
+	for (int i = 0; i < 5; ++i)
+		a.add(i * 2);
+	int x = a.get();
+	cout << x;
+}
